@@ -84,7 +84,6 @@ const Flights = ({ setSaveProgress }: FlightsProps) => {
       },
       body: JSON.stringify(flightsData),
     });
-    console.log(flightsData);
     const res = await req.json();
 
     if (res && res.id) {

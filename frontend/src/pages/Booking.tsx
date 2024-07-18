@@ -36,7 +36,11 @@ const Booking = () => {
   const handleIntervall = (depDate: string, flightTime: number) => {
     const arrivalDate = dayjs(depDate).add(flightTime, "minute").format();
     if (arrivalDate) {
-      return arrivalDate.split("T")[0]+' '+arrivalDate.split("T")[1].split('+')[0];
+      return (
+        arrivalDate.split("T")[0] +
+        " " +
+        arrivalDate.split("T")[1].split("+")[0]
+      );
     }
   };
 
@@ -89,7 +93,7 @@ const Booking = () => {
       setSelectedExtras((prevSelected) => [...prevSelected, extra]);
     } else {
       setSelectedExtras((prevSelected) =>
-        prevSelected.filter((se) => se.id !== extra.id)
+        prevSelected.filter((se) => se.id !== extra.id),
       );
     }
   };
@@ -188,8 +192,8 @@ const Booking = () => {
                   {flightData &&
                     handleIntervall(
                       flightData?.departureDate,
-                      parseInt(flightData?.flightTime)
-                    ) }
+                      parseInt(flightData?.flightTime),
+                    )}
                 </div>
               </Grid>
             </Grid>
@@ -259,7 +263,7 @@ const Booking = () => {
                   flightData.price * (seatIDs.length > 0 ? seatIDs.length : 1) +
                     selectedExtras.reduce(
                       (total, se) => total + se.price,
-                      0
+                      0,
                     )}{" "}
                 Ft
               </Typography>
@@ -299,7 +303,7 @@ const Booking = () => {
                         setSeatIDs((prevSeatIDs) => [...prevSeatIDs, seat.id]);
                       } else {
                         setSeatIDs((prevSeatIDs) =>
-                          prevSeatIDs.filter((id) => id !== seat.id)
+                          prevSeatIDs.filter((id) => id !== seat.id),
                         );
                       }
                     }}

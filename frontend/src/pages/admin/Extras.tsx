@@ -6,7 +6,7 @@ export interface ExtrasData {
   name?: string;
   price?: number;
   description?: string;
-  id?: string 
+  id?: string;
 }
 
 interface ExtrasProps {
@@ -18,7 +18,7 @@ const Extras = ({ setSaveProgress }: ExtrasProps) => {
   const [savedExtras, setSavedExtras] = useState<ExtrasData[]>([]);
 
   useEffect(() => {
-   getExtras();
+    getExtras();
   }, []);
 
   const getExtras = async () => {
@@ -90,7 +90,10 @@ const Extras = ({ setSaveProgress }: ExtrasProps) => {
           Submit
         </Button>
       </Card>
-      <Card elevation={3} className="p-10 flex flex-col gap-4 items-center justify-center">
+      <Card
+        elevation={3}
+        className="p-10 flex flex-col gap-4 items-center justify-center"
+      >
         <Typography variant="h5">Extras</Typography>
         <Grid className="w-full border-b" container spacing={2}>
           <Grid item xs={2}>
@@ -105,32 +108,32 @@ const Extras = ({ setSaveProgress }: ExtrasProps) => {
           <Grid item xs={1}>
             <div>Options</div>
           </Grid>
-       
         </Grid>
-        {savedExtras && savedExtras.map((se: ExtrasData, index) => (
-          <Grid
-            key={se.id}
-            className={`w-full pt-3 pb-3 border-b border-white/20 ${
-              index % 2 !== 0 ? "bg-gray-800/50" : ""
-            }`}
-            container
-            spacing={2}
-          >
-            <Grid item xs={2}>
-              <div>{se.name}</div>
+        {savedExtras &&
+          savedExtras.map((se: ExtrasData, index) => (
+            <Grid
+              key={se.id}
+              className={`w-full pt-3 pb-3 border-b border-white/20 ${
+                index % 2 !== 0 ? "bg-gray-800/50" : ""
+              }`}
+              container
+              spacing={2}
+            >
+              <Grid item xs={2}>
+                <div>{se.name}</div>
+              </Grid>
+
+              <Grid item xs={8}>
+                <div>{se.description}</div>
+              </Grid>
+              <Grid item xs={1}>
+                <div>{se.price} Ft</div>
+              </Grid>
+              <Grid item xs={1}>
+                <div></div>
+              </Grid>
             </Grid>
-         
-            <Grid item xs={8}>
-              <div>{se.description}</div>
-            </Grid>
-            <Grid item xs={1}>
-              <div>{se.price} Ft</div>
-            </Grid>
-            <Grid item xs={1}>
-              <div></div>
-            </Grid>
-          </Grid>
-        ))}
+          ))}
       </Card>
     </div>
   );

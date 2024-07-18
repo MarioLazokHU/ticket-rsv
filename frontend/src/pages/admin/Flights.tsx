@@ -111,14 +111,14 @@ const Flights = ({ setSaveProgress }: FlightsProps) => {
           <DateTimePicker
             views={["year", "month", "day", "hours", "minutes"]}
             value={dayjs(flightsData.departureDate)}
-            onChange={(date) =>
-            {
-              if(date){
-                setFlightsData({...flightsData, departureDate: date.toDate().toDateString()})
+            onChange={(date) => {
+              if (date) {
+                setFlightsData({
+                  ...flightsData,
+                  departureDate: date.toDate().toDateString(),
+                });
               }
-              
-            }
-            }
+            }}
           />
         </LocalizationProvider>
         <TextField

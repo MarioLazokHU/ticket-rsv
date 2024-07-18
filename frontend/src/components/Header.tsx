@@ -30,11 +30,7 @@ const Header = () => {
     <>
       <header className="w-screen z-30 flex justify-between pl-10 pr-20 items-center h-28 top-0 shadow-lg fixed bg-dark">
         <NavLink to="/" className="flex justify-center gap-2 items-center">
-          <img
-            className="w-40 "
-            src="/Homan-transport-logo_white.svg"
-            alt=""
-          />
+          <img className="w-40 " src="/Homan-transport-logo_white.svg" alt="" />
 
           <Typography variant="h2">Homan Air Services</Typography>
         </NavLink>
@@ -43,13 +39,16 @@ const Header = () => {
           {loggedIn ? (
             <>
               <div className="flex flex-row gap-5">
-              <NavLink className="flex items-center gap-4" to="/">
+                <NavLink className="flex items-center gap-4" to="/">
                   <FontAwesomeIcon icon={faHome} />
                   Home
                 </NavLink>
                 {role === "admin" && (
                   <>
-                    <NavLink className="flex items-center gap-4" to="/admin/flights">
+                    <NavLink
+                      className="flex items-center gap-4"
+                      to="/admin/flights"
+                    >
                       <FontAwesomeIcon size="lg" icon={faLock} />
                       Admin
                     </NavLink>
@@ -62,7 +61,7 @@ const Header = () => {
                 </NavLink>
                 <NavLink className="flex items-center gap-2" to="/account">
                   <FontAwesomeIcon size="lg" icon={faUser} />
-                  {getCookie('user').name ?? 'Account'}
+                  {getCookie("user").name ?? "Account"}
                 </NavLink>
               </div>
             </>

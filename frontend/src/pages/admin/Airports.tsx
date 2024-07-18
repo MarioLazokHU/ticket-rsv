@@ -88,7 +88,10 @@ const Airports = ({ setSaveProgress }: AirportsProps) => {
           Submit
         </Button>
       </Card>
-      <Card elevation={3} className="p-10 flex flex-col gap-4 items-center justify-center">
+      <Card
+        elevation={3}
+        className="p-10 flex flex-col gap-4 items-center justify-center"
+      >
         <Typography variant="h5">Airports</Typography>
         <Grid className="w-full border-b" container spacing={2}>
           <Grid item xs={3}>

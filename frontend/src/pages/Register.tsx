@@ -1,15 +1,14 @@
 import { Alert, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
-
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../components/context/AuthContext";
 import { BASE_URL } from "../utils/config";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName]= useState("")
+  const [name, setName] = useState("");
   const [regError, setRegError] = useState(false);
   const { login } = useAuth();
 
@@ -25,7 +24,7 @@ export const Register = () => {
     if (response) {
       setRegError(false);
       login();
-      window.location.replace('/login')
+      window.location.replace("/login");
     } else {
       return setRegError(true);
     }

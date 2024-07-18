@@ -32,7 +32,7 @@ type AuthProviderProps = {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState('');
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
     const user = getCookie("user");
@@ -50,11 +50,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = () => {
     setCookie("user", null);
     setLoggedIn(false);
-    setUserRole('');
+    setUserRole("");
   };
 
   const authUser = async (id: string, token: string) => {
-    if(id && token){
+    if (id && token) {
       const response = await fetch(`${BASE_URL}/user/auth`, {
         method: "POST",
         body: JSON.stringify({ id, token }),
@@ -68,10 +68,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUserRole(data.role);
         login();
       } else {
-       
       }
     }
-   
   };
 
   return (

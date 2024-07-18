@@ -17,7 +17,7 @@ const Bookings = () => {
   useEffect(() => {
     getBookings();
   }, []);
- 
+
   return (
     <>
       <div className="w-full flex flex-col gap-5 items-center justify-center">
@@ -74,7 +74,9 @@ const Bookings = () => {
                   </Grid>
                   <Grid item xs={1}>
                     <div>{b.flight.departureDate.split("T")[0]}</div>
-                    <div className="text-sm text-white/50">{b.flight.departureDate.split("T")[1].split('.')[0]}</div>
+                    <div className="text-sm text-white/50">
+                      {b.flight.departureDate.split("T")[1].split(".")[0]}
+                    </div>
                   </Grid>
                   <Grid item xs={1}>
                     <div>{b.flight.flightTime / 60} h </div>
@@ -96,7 +98,9 @@ const Bookings = () => {
                       return (
                         <div>
                           <div>{e.name}</div>
-                          <div className="text-sm text-white/50">{e.price} Ft</div>
+                          <div className="text-sm text-white/50">
+                            {e.price} Ft
+                          </div>
                         </div>
                       );
                     })}

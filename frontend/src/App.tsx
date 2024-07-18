@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "./components/context/AuthContext";
 
@@ -31,9 +27,9 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <AuthProvider>
-          <Router>
-            <MainContent />
-          </Router>
+        <Router>
+          <MainContent />
+        </Router>
       </AuthProvider>
     </ThemeProvider>
   );
@@ -50,7 +46,7 @@ function MainContent() {
           {loggedIn ? (
             <>
               <Route path="/" element={<Home />} />
-              <Route path="/my-bookings" element={<UserBookings/>} />
+              <Route path="/my-bookings" element={<UserBookings />} />
               <Route path="/booking" element={<Booking />} />
               {userRole === "admin" && (
                 <Route path="/admin/*" element={<Admin />} />

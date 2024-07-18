@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { useEffect, useState } from "react";
@@ -15,7 +15,8 @@ import { getCookie } from "../utils/cookies";
 
 const Header = () => {
   const [role, setRole] = useState("user");
-  const { loggedIn, userRole } = useAuth();
+  const [accountOpened, setAccountOpened] = useState(false)
+  const { loggedIn, userRole, logout } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     if (loggedIn) {
@@ -57,10 +58,11 @@ const Header = () => {
                   <FontAwesomeIcon icon={faTicket} />
                   My Flight Bookings
                 </NavLink>
-                <NavLink className="flex items-center gap-2" to="/account">
+                <Button variant="contained" onClick={()=>setAccountOpened(!accountOpened)} className="flex relative items-center gap-2" >
                   <FontAwesomeIcon size="lg" icon={faUser} />
                   {getCookie("user").name ?? "Account"}
-                </NavLink>
+                  {accountOpened && <Card className="absolute top-10 p-10"><NavLink onClick={logout} to="/login">Logout</NavLink></Card>}
+                </Button>
               </div>
             </>
           ) : (

@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Alert, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { setCookie } from "../utils/cookies";
 
@@ -9,6 +9,7 @@ import { BASE_URL } from "../utils/config";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [onError, setOnError] = useState(false)
 
   const { login } = useAuth();
 
@@ -25,6 +26,11 @@ export const Login = () => {
       setCookie("user", response, 7);
       login();
       window.location.replace("/");
+    }else{
+      setOnError(true)
+      setTimeout(()=>{
+        setOnError(false)
+      },5000)
     }
   };
 
@@ -51,8 +57,9 @@ export const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button onClick={handleLogin}>LogIn</Button>
+        <Button variant="contained" onClick={handleLogin}>LogIn</Button>
         <NavLink to="/register">You not registered?</NavLink>
+        {onError &&  <Alert severity="error">Invalid creditentals</Alert>}
       </div>
     </div>
   );

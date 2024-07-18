@@ -5,7 +5,7 @@ export class AirportDTO {
 }
 
 export class FlightDTO {
-  departureDate: string
+  departureDate: string;
   price: number;
   departueAirport: string;
   arrivalAirport: string;
@@ -15,5 +15,5 @@ export class FlightDTO {
 export class ExtraDTO {
   name: string;
   price: number;
-  description: string; 
+  description: string;
 }

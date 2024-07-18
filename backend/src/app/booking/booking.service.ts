@@ -36,12 +36,11 @@ export class BookingService {
         ),
       }))
       .run(client);
-    if(foundFlights.length > 0){
+    if (foundFlights.length > 0) {
       return foundFlights;
-    }else{
-      throw new NotFoundException('Flights not found')
+    } else {
+      throw new NotFoundException('Flights not found');
     }
-    
   }
 
   public async getFlight(id: string) {
@@ -105,7 +104,6 @@ export class BookingService {
 
       await Promise.all(
         bookingDTO.seatIds.map((si) => {
-
           e.update(e.Seat, () => ({
             set: {
               isBooked: true,
@@ -122,7 +120,6 @@ export class BookingService {
                 .assert_single(),
             },
           })).run(client);
-          
         }),
       );
 
@@ -136,11 +133,11 @@ export class BookingService {
         ...e.Booking['*'],
         extras: { ...e.Extra['*'] },
         user: { email: true, name: true, id: true },
-        seats: {...e.Seat['*']},
+        seats: { ...e.Seat['*'] },
         flight: {
           ...e.Flight['*'],
-          departueAirport: {...e.Airport['*']},
-          arrivalAirport: {...e.Airport['*']}
+          departueAirport: { ...e.Airport['*'] },
+          arrivalAirport: { ...e.Airport['*'] },
         },
       }))
       .run(client);
@@ -154,13 +151,13 @@ export class BookingService {
         ...e.Booking['*'],
         extras: { ...e.Extra['*'] },
         user: { email: true, name: true, id: true },
-        seats: {...e.Seat['*']},
+        seats: { ...e.Seat['*'] },
         flight: {
           ...e.Flight['*'],
-          departueAirport: {...e.Airport['*']},
-          arrivalAirport: {...e.Airport['*']}
+          departueAirport: { ...e.Airport['*'] },
+          arrivalAirport: { ...e.Airport['*'] },
         },
-        filter: e.op(b.user.id, '=', e.uuid(id))
+        filter: e.op(b.user.id, '=', e.uuid(id)),
       }))
       .run(client);
 

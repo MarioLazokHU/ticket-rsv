@@ -19,9 +19,7 @@ export class UserController {
   }
 
   @Post('/register')
-  async registerUser(
-    @Body() userDTO: UserDTO,
-  ): Promise<{ id: string; }> {
+  async registerUser(@Body() userDTO: UserDTO): Promise<{ id: string }> {
     const data = await this.userService.registerUser(userDTO);
     if (data) {
       return data;

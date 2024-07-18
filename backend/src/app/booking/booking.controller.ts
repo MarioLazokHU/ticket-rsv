@@ -9,13 +9,15 @@ export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post('/search')
-  async searchAvaidableFlights(@Body() searchParams: SearchDTO): Promise<Flight[]> {
+  async searchAvaidableFlights(
+    @Body() searchParams: SearchDTO,
+  ): Promise<Flight[]> {
     return this.bookingService.searchFlights(searchParams);
   }
 
   @Post('/save')
-  async setBooking(@Body() bookingDTO: BookingDTO): Promise<{id: string}>{
-    return this.bookingService.saveBooking(bookingDTO)
+  async setBooking(@Body() bookingDTO: BookingDTO): Promise<{ id: string }> {
+    return this.bookingService.saveBooking(bookingDTO);
   }
 
   @Get('/flight/:id')
@@ -24,12 +26,12 @@ export class BookingController {
   }
 
   @Get('/bookings')
-  async getBookings(): Promise<BookingsList[]>{
-    return this.bookingService.getBookings()
+  async getBookings(): Promise<BookingsList[]> {
+    return this.bookingService.getBookings();
   }
 
   @Get('/user-bookings/:id')
-  async getUserBookings(@Param('id') id: string): Promise<BookingsList[]>{
-    return this.bookingService.getUserBookings(id)
+  async getUserBookings(@Param('id') id: string): Promise<BookingsList[]> {
+    return this.bookingService.getUserBookings(id);
   }
 }

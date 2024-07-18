@@ -7,9 +7,7 @@ import { BookingController } from './app/booking/booking.controller';
 import { BookingService } from './app/booking/booking.service';
 
 @Module({
-  imports: [
-  
-  ],
+  imports: [],
   controllers: [UserController, AdminContoller, BookingController],
   providers: [UserService, AdminService, BookingService],
 })

@@ -90,7 +90,7 @@ export class AdminService {
                 })),
               },
             },
-            filter_single: {id: flight.id}
+            filter_single: { id: flight.id },
           }))
           .run(client);
       }),

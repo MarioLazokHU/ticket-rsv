@@ -1,3 +1,3 @@
-import e from '../edgeql-js'
+import e from '../edgeql-js';
 
-export default e
+export default e;

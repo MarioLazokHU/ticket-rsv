@@ -1,34 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from "react-router-dom";
+
+import { AuthProvider, useAuth } from "./components/context/AuthContext";
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import { Register } from "./pages/Register";
+import { Login } from "./pages/Login";
+import Admin from "./pages/admin/Admin";
+import Booking from "./pages/Booking";
+import UserBookings from "./pages/MyBookings";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#222831",
+    },
+    secondary: { main: "#FFD369" },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <AuthProvider>
+          <Router>
+            <MainContent />
+          </Router>
+      </AuthProvider>
+    </ThemeProvider>
+  );
 }
 
-export default App
+function MainContent() {
+  const { loggedIn, userRole } = useAuth();
+
+  return (
+    <div className="flex w-full">
+      <Header />
+      <div className="w-full mt-36 flex text-white items-center justify-center">
+        <Routes>
+          {loggedIn ? (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/my-bookings" element={<UserBookings/>} />
+              <Route path="/booking" element={<Booking />} />
+              {userRole === "admin" && (
+                <Route path="/admin/*" element={<Admin />} />
+              )}
+            </>
+          ) : (
+            <>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+            </>
+          )}
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
+export default App;

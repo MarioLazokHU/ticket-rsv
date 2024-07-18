@@ -296,3 +296,27 @@ Represents the flight entity with relevant fields and associations.
 BookingsList
 Represents the booking entity with detailed information, including associated user, flight, seats, and extras.
 
+# Test 
+
+## Integration Testing for UserService in NestJS
+This document outlines the integration tests for the UserService in a NestJS application using Jest for testing. Integration tests verify the interactions between the service methods and the EdgeDB database, ensuring that user registration, login, and authentication functions correctly.
+
+### Setup
+The integration tests are designed to validate the functionality of the UserService against the EdgeDB database. Here’s an overview of the testing setup and the tests themselves:
+
+Testing Module Setup: Uses Test.createTestingModule from @nestjs/testing to create a testing module for the UserService with dependencies properly injected.
+
+Database Cleanup: Utilizes afterAll hook to clean up test data after all tests have been executed, ensuring a clean state for subsequent test runs.
+
+Test Data: Defines a test user object (userIn) with email, name, and password for user registration and authentication tests.
+
+### Tests
+Registration Test: Verifies that the registerUser method in UserService correctly registers a new user and returns a valid user id. It checks the returned id format and ensures that the registration process behaves as expected.
+
+Login Tests: Tests the loginUser method to ensure correct user authentication. It validates that the method returns user data including id, name, role, and token upon successful login. It also tests for scenarios where invalid credentials trigger an error with the message 'Invalid credentials'.
+
+Authentication Tests: Validates the authUser method functionality, which verifies user identity based on a token. It asserts that the method returns partial user data including the token and role when provided with a valid token. It also tests for error handling when an invalid token is provided, triggering an error with the message 'Invalid token'.
+
+### Conclusion
+These integration tests provide comprehensive coverage for the UserService operations related to user registration, login, and authentication. By testing against a real EdgeDB instance using Jest and NestJS testing utilities, they ensure that the service methods interact correctly with the database and handle edge cases appropriately.
+

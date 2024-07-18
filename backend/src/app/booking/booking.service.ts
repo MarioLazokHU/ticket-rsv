@@ -78,55 +78,61 @@ export class BookingService {
 
     if (id) {
       if (bookingDTO.extraIds.length > 0) {
-        await Promise.all(
-          bookingDTO.extraIds.map((ei) =>
-            e
-              .update(e.Booking, () => ({
-                set: {
-                  extras: e.select(e.Extra, () => ({
+        await Promise.all(bookingDTO.extraIds.map(async (ei) => {
+          await e
+            .update(e.Booking, () => ({
+              set: {
+                extras: {
+                  '+=': e.select(e.Extra, () => ({
                     filter_single: { id: ei },
-                  })),
+                  }))
                 },
-              }))
-              .run(client),
-          ),
-        );
+              },
+              filter_single: { id },
+            }))
+            .run(client);
+        }));
       }
+
       await e
         .update(e.User, () => ({
           set: {
-            bookings: e.select(e.Booking, () => ({
-              filter_single: { id },
-            })),
+            bookings: {
+              '+=': e.select(e.Booking, () => ({
+                filter_single: { id },
+              })),
+            },
           },
+          filter_single: { id: bookingDTO.userId },
         }))
         .run(client);
 
-      await Promise.all(
-        bookingDTO.seatIds.map((si) => {
-          e.update(e.Seat, () => ({
+      await Promise.all(bookingDTO.seatIds.map(async (si) => {
+        await e
+          .update(e.Seat, () => ({
             set: {
               isBooked: true,
             },
             filter_single: { id: si },
-          })).run(client);
+          }))
+          .run(client);
 
-          e.update(e.Booking, () => ({
+        await e
+          .update(e.Booking, () => ({
             set: {
-              seats: e
-                .select(e.Seat, () => ({
+              seats: {
+                '+=': e.select(e.Seat, () => ({
                   filter_single: { id: si },
                 }))
-                .assert_single(),
+              },
             },
-          })).run(client);
-        }),
-      );
-
+            filter_single: { id },
+          }))
+          .run(client);
+      }));
       return { id };
     }
-  }
-
+}
   public async getBookings() {
     const bookings = await e
       .select(e.Booking, () => ({

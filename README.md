@@ -69,3 +69,5 @@ New extra services can be added to the database.
 
 #### Flights Subpage
 Admin can create new flights.
+
+# Licence: Personal Use Only

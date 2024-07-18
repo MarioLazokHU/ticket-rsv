@@ -10,23 +10,32 @@ export const Register = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [regError, setRegError] = useState(false);
+  const [regexError, setRegexError] = useState(false);
   const { login } = useAuth();
 
   const handleRegister = async () => {
-    const request = await fetch(`${BASE_URL}/user/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password, name }),
-    });
-    const response = await request.json();
-    if (response) {
-      setRegError(false);
-      login();
-      window.location.replace("/login");
+    const emailRegex = new RegExp("^[w.-]+@[a-zA-Zd.-]+.[a-zA-Z]{2,}$");
+    const passwordRegex = new RegExp(
+      "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[A-Za-zd]{8,}$"
+    );
+    if (emailRegex.test(email) && passwordRegex.test(password)) {
+      const request = await fetch(`${BASE_URL}/user/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, name }),
+      });
+      const response = await request.json();
+      if (response) {
+        setRegError(false);
+        login();
+        window.location.replace("/login");
+      } else {
+        return setRegError(true);
+      }
     } else {
-      return setRegError(true);
+     return setRegexError(true);
     }
   };
 
@@ -41,6 +50,7 @@ export const Register = () => {
           label="Full Name"
           variant="standard"
           autoComplete="new-password"
+          required
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -49,6 +59,7 @@ export const Register = () => {
           label="Email"
           variant="standard"
           autoComplete="new-password"
+          required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -58,10 +69,16 @@ export const Register = () => {
           variant="standard"
           autoComplete="new-password"
           type="password"
+          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button onClick={handleRegister}>Register</Button>
+        <div className={`${regexError ? 'bg-red-500' : ''}`}>*
+          At least 8 characters long. Contains at least one uppercase letter
+          (A-Z). Contains at least one lowercase letter (a-z). Contains at least
+          one digit (0-9).
+        </div>
+        <Button variant="contained" onClick={handleRegister}>Register</Button>
         <NavLink to="/login">You have account?</NavLink>
       </div>
       {regError && <Alert severity="error">Something went wrong.</Alert>}

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AirportDTO, ExtraDTO, FlightDTO } from '../../dto/admin/admin.dto';
 import { Airport, Extra, Flight } from '../../edgeql-js/interfaces';

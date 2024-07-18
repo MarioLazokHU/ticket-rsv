@@ -98,7 +98,7 @@ const UserBookings = () => {
                   </Grid>
                   <Grid className="flex flex-wrap" item xs={1}>
                     {b.seats.map((s) => {
-                      return <div>{s.position}</div>;
+                      return <div className="pl-1">[{s.position}]</div>;
                     })}
                   </Grid>
                   <Grid item xs={2}>
@@ -108,7 +108,7 @@ const UserBookings = () => {
                   <Grid item xs={2}>
                     {b.extras.map((e) => {
                       return (
-                        <div>
+                        <div className="flex items-center justify-between">
                           <div>{e.name}</div>
                           <div className="text-sm text-white/50">
                             {e.price} Ft

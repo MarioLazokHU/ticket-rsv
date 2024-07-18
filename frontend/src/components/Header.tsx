@@ -30,9 +30,7 @@ const Header = () => {
     <>
       <header className="w-screen z-30 flex justify-between pl-10 pr-20 items-center h-28 top-0 shadow-lg fixed bg-dark">
         <NavLink to="/" className="flex justify-center gap-2 items-center">
-          <img className="w-40 " src="/Homan-transport-logo_white.svg" alt="" />
-
-          <Typography variant="h2">Homan Air Services</Typography>
+          <Typography variant="h2">BlackBox Air Services</Typography>
         </NavLink>
 
         <div className="flex ">

@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Card,
   InputLabel,
@@ -28,6 +29,7 @@ const Home = () => {
     passengers: 1,
   });
   const [flightsResultList, setFlightsResultList] = useState<Flight[]>([]);
+  const [errorStatus, setErrorStatus] = useState<{status: number, message: string}>()
 
   useEffect(() => {
     getAirports();
@@ -50,8 +52,10 @@ const Home = () => {
       body: JSON.stringify(searchFlightsParams),
     });
     const res = await req.json();
-    if (res) {
+    if (res && Array.isArray(res)) {
       setFlightsResultList(res);
+    }else{
+      setErrorStatus(res)
     }
   };
 
@@ -164,6 +168,7 @@ const Home = () => {
             </div>
           </Card>
         </div>
+        {errorStatus && errorStatus.status && <Alert severity="warning">Flight Not Found</Alert>}
         {flightsResultList.length > 0 && (
           <>
             <Typography variant="h4">Results:</Typography>

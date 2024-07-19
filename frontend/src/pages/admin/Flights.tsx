@@ -9,10 +9,11 @@ import {
   MenuItem,
   InputLabel,
   Tooltip,
+  Alert,
 } from "@mui/material";
 import { BASE_URL } from "../../utils/config";
 import { AirportData } from "./Airports";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
@@ -53,6 +54,7 @@ const Flights = ({ setSaveProgress }: FlightsProps) => {
   });
   const [savedFlights, setSavedFlights] = useState<Flight[]>([]);
   const [savedAirports, setSavedAirports] = useState<AirportData[]>([]);
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     getFlights();
@@ -76,6 +78,8 @@ const Flights = ({ setSaveProgress }: FlightsProps) => {
   };
 
   const handleSubmitFlight = async () => {
+    // TODO: use zod for data validation
+    if(flightsData.arrivalAirport && flightsData.departueAirport && flightsData.departureDate && flightsData.flightTime && flightsData.price){
     setSaveProgress(true);
     const req = await fetch(`${BASE_URL}/admin/save-flight`, {
       method: "POST",
@@ -95,8 +99,12 @@ const Flights = ({ setSaveProgress }: FlightsProps) => {
         flightTime: "",
       });
       setSaveProgress(false);
+      setError(false)
       await getFlights();
     }
+  }else{
+    setError(true)
+  }
   };
 
   return (
@@ -178,6 +186,7 @@ const Flights = ({ setSaveProgress }: FlightsProps) => {
         <Button variant="contained" onClick={handleSubmitFlight}>
           Submit
         </Button>
+        {error && <Alert severity="error">Please fill all data!</Alert>}
       </Card>
       <Card
         elevation={3}

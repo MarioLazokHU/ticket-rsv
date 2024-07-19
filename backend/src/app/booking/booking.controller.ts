@@ -11,7 +11,7 @@ export class BookingController {
   @Post('/search')
   async searchAvaidableFlights(
     @Body() searchParams: SearchDTO,
-  ): Promise<Flight[]> {
+  ): Promise<Flight[] | { status: number; message: string }> {
     return this.bookingService.searchFlights(searchParams);
   }
 

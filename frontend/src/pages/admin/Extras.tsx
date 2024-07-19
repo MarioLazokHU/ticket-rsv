@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Grid, TextField, Typography, Button } from "@mui/material";
+import { Card, Grid, TextField, Typography, Button, Alert } from "@mui/material";
 import { BASE_URL } from "../../utils/config";
 
 export interface ExtrasData {
@@ -16,6 +16,7 @@ interface ExtrasProps {
 const Extras = ({ setSaveProgress }: ExtrasProps) => {
   const [extraData, setExtraData] = useState<ExtrasData>({});
   const [savedExtras, setSavedExtras] = useState<ExtrasData[]>([]);
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     getExtras();
@@ -38,6 +39,8 @@ const Extras = ({ setSaveProgress }: ExtrasProps) => {
   };
 
   const handleSubmtiExtra = async () => {
+    // TODO: use zod for data validation
+    if(extraData.name && extraData.price && extraData.description){
     setSaveProgress(true);
     const req = await fetch(`${BASE_URL}/admin/save-extra`, {
       method: "POST",
@@ -51,8 +54,12 @@ const Extras = ({ setSaveProgress }: ExtrasProps) => {
     if (res && res.id) {
       setExtraData({});
       setSaveProgress(false);
+      setError(false)
       await getExtras();
     }
+  }else{
+    setError(true)
+  }
   };
 
   return (
@@ -89,6 +96,7 @@ const Extras = ({ setSaveProgress }: ExtrasProps) => {
         <Button variant="contained" onClick={handleSubmtiExtra}>
           Submit
         </Button>
+        {error && <Alert severity="error">Please fill all data!</Alert>}
       </Card>
       <Card
         elevation={3}

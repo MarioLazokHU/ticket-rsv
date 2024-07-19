@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Grid, TextField, Typography, Button } from "@mui/material";
+import { Card, Grid, TextField, Typography, Button, Alert } from "@mui/material";
 import { BASE_URL } from "../../utils/config";
 
 export interface AirportData {
@@ -16,6 +16,7 @@ interface AirportsProps {
 const Airports = ({ setSaveProgress }: AirportsProps) => {
   const [airportData, setAirportData] = useState<AirportData>({});
   const [savedAirports, setSavedAirports] = useState<AirportData[]>([]);
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     getAirports();
@@ -38,6 +39,8 @@ const Airports = ({ setSaveProgress }: AirportsProps) => {
   };
 
   const handleSubmtiAirport = async () => {
+     // TODO: use zod for data validation
+    if(airportData.city && airportData.country && airportData.name){
     setSaveProgress(true);
     const req = await fetch(`${BASE_URL}/admin/save-airport`, {
       method: "POST",
@@ -50,9 +53,13 @@ const Airports = ({ setSaveProgress }: AirportsProps) => {
 
     if (res && res.id) {
       setAirportData({});
+      setError(false)
       setSaveProgress(false);
       await getAirports();
     }
+  }else{
+    setError(true)
+  }
   };
 
   return (
@@ -87,6 +94,7 @@ const Airports = ({ setSaveProgress }: AirportsProps) => {
         <Button variant="contained" onClick={handleSubmtiAirport}>
           Submit
         </Button>
+        {error && <Alert severity="error">Please fill all data!</Alert>}
       </Card>
       <Card
         elevation={3}

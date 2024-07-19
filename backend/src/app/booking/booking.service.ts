@@ -6,41 +6,48 @@ import { BookingDTO, SearchDTO } from '../../dto/booking/booking.dto';
 @Injectable()
 export class BookingService {
   public async searchFlights(searchParams: SearchDTO) {
-    const searchParamsDepartureDate = new Date(searchParams.departureDate);
-    const foundFlights = await e
-      .select(e.Flight, (flight) => ({
-        ...e.Flight['*'],
-        departueAirport: { ...e.Airport['*'] },
-        arrivalAirport: { ...e.Airport['*'] },
-        seats: { ...e.Seat['*'] },
-        filter: e.op(
-          e.op(
-            e.datetime_truncate(flight.departureDate, 'days'),
-            '=',
-            e.datetime_truncate(searchParamsDepartureDate, 'days'),
-          ),
-          'and',
-          e.op(
+    if (
+      searchParams.arrivalAirport &&
+      searchParams.departueAirport &&
+      searchParams.departureDate
+    ) {
+      const searchParamsDepartureDate = new Date(searchParams.departureDate);
+      const foundFlights = await e
+        .select(e.Flight, (flight) => ({
+          ...e.Flight['*'],
+          departueAirport: { ...e.Airport['*'] },
+          arrivalAirport: { ...e.Airport['*'] },
+          seats: { ...e.Seat['*'] },
+          filter: e.op(
             e.op(
-              flight.arrivalAirport.id,
+              e.datetime_truncate(flight.departureDate, 'days'),
               '=',
-              e.uuid(searchParams.arrivalAirport),
+              e.datetime_truncate(searchParamsDepartureDate, 'days'),
             ),
             'and',
             e.op(
-              flight.departueAirport.id,
-              '=',
-              e.uuid(searchParams.departueAirport),
+              e.op(
+                flight.arrivalAirport.id,
+                '=',
+                e.uuid(searchParams.arrivalAirport),
+              ),
+              'and',
+              e.op(
+                flight.departueAirport.id,
+                '=',
+                e.uuid(searchParams.departueAirport),
+              ),
             ),
           ),
-        ),
-      }))
-      .run(client);
-    if (foundFlights.length > 0) {
-      return foundFlights;
-    } else {
-      throw new NotFoundException('Flights not found');
+        }))
+        .run(client);
+      if (foundFlights.length > 0) {
+        return foundFlights;
+      } else {
+        return { status: 404, message: 'Not found' };
+      }
     }
+    return { status: 422, message: 'Missing data' };
   }
 
   public async getFlight(id: string) {
@@ -78,20 +85,22 @@ export class BookingService {
 
     if (id) {
       if (bookingDTO.extraIds.length > 0) {
-        await Promise.all(bookingDTO.extraIds.map(async (ei) => {
-          await e
-            .update(e.Booking, () => ({
-              set: {
-                extras: {
-                  '+=': e.select(e.Extra, () => ({
-                    filter_single: { id: ei },
-                  }))
+        await Promise.all(
+          bookingDTO.extraIds.map(async (ei) => {
+            await e
+              .update(e.Booking, () => ({
+                set: {
+                  extras: {
+                    '+=': e.select(e.Extra, () => ({
+                      filter_single: { id: ei },
+                    })),
+                  },
                 },
-              },
-              filter_single: { id },
-            }))
-            .run(client);
-        }));
+                filter_single: { id },
+              }))
+              .run(client);
+          }),
+        );
       }
 
       await e
@@ -107,32 +116,34 @@ export class BookingService {
         }))
         .run(client);
 
-      await Promise.all(bookingDTO.seatIds.map(async (si) => {
-        await e
-          .update(e.Seat, () => ({
-            set: {
-              isBooked: true,
-            },
-            filter_single: { id: si },
-          }))
-          .run(client);
-
-        await e
-          .update(e.Booking, () => ({
-            set: {
-              seats: {
-                '+=': e.select(e.Seat, () => ({
-                  filter_single: { id: si },
-                }))
+      await Promise.all(
+        bookingDTO.seatIds.map(async (si) => {
+          await e
+            .update(e.Seat, () => ({
+              set: {
+                isBooked: true,
               },
-            },
-            filter_single: { id },
-          }))
-          .run(client);
-      }));
+              filter_single: { id: si },
+            }))
+            .run(client);
+
+          await e
+            .update(e.Booking, () => ({
+              set: {
+                seats: {
+                  '+=': e.select(e.Seat, () => ({
+                    filter_single: { id: si },
+                  })),
+                },
+              },
+              filter_single: { id },
+            }))
+            .run(client);
+        }),
+      );
       return { id };
     }
-}
+  }
   public async getBookings() {
     const bookings = await e
       .select(e.Booking, () => ({
